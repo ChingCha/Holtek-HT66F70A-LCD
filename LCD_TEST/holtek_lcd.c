@@ -6,6 +6,8 @@
 #define LCM_ENC			_pec0
 #define LCM_RS			_pe1
 #define LCM_RSC			_pec1
+//#define LCM_RW			_pe2
+//#define LCM_RWC			_pec2
 #define LCM_DataPort	_pd
 #define LCM_DataPortC	_pdc
 
