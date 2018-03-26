@@ -1,4 +1,4 @@
-				;file C:\Users\L0614\Desktop\Holtek\LCD TEST\LCD_TEST\LCD_TEST.c
+				;file C:\Users\L0614\Desktop\Holtek\Holtek-HT66F70A-LCD\LCD_TEST\LCD_TEST.c
 				;1	#include "HT66F70A.h"
 				;2	#include "holtek_lcd.h"
 				;3	#include "holtek_lcd.c"
@@ -14,331 +14,307 @@
 				@start .SECTION 'CODE'
 0002	0F00	mov     a, 0H
 0003	008B	mov     BP, a
-0004	28C7	jmp     _main
-0005	4241	sub     a, addr1[59]
-0006	4443	xor     a, addr1[61]
-0007	4645	and     a, addr1[63]
-0008	0000	nop
-0009	1483	inc     MP1L
-				L000A:
-000A	3F84	sz      MP1H.7
-000B	280E	jmp     L000E
-000C	0702	mov     a, [02H]
-000D	0003	ret
-				L000E:
-000E	1B04	rrca    MP1H
-000F	0E3F	and     a, 3FH
-0010	0089	mov     TBHP, a
-0011	1B03	rrca    MP1L
-0012	0087	mov     TBLP, a
-0013	1D05	tabrd   ACC
-0014	3C0A	sz      C
-0015	0708	mov     a, TBLH
-0016	0003	ret
-				;7		LCD_Init();
+0004	28A0	jmp     _main
+				;7		unsigned short i;
+				;8		LCD_Init();
 				_main:
 				_main:
-00C7	208E	call    _LCD_Init
-				;8		PAUSE(100);
-00C8	0F64	mov     a, 64H
-00C9	4084	mov     i, a
-00CA	5F05	clr     i[1]
-00CB	206F	call    _PAUSE
-				;9		LCD_Str(0x80, "ABCDEF");
-00CC	0F0A	mov     a, AH
-00CD	4084	mov     i, a
-00CE	0F80	mov     a, 80H
-00CF	4085	mov     i[1], a
-00D0	0F80	mov     a, 80H
-00D1	204E	call    _LCD_Str
-				;10		PAUSE(1000);
-00D2	0FE8	mov     a, E8H
-00D3	4084	mov     i, a
-00D4	0F03	mov     a, 3H
-00D5	4085	mov     i[1], a
-00D6	206F	call    _PAUSE
-00D7	28D7	jmp     $
-				;11	}
-				;12	void PAUSE(unsigned short i)						
-				;13	{	unsigned short j;
-				;14		for (j=0;j<i;j++) GCC_DELAY(10000);				//Delay i*10mS 
-				_PAUSE:
-				_PAUSE:
-006F	5F01	clr     rb
-0070	5F02	clr     rc
-0071	287D	jmp     _L11
+00A0	2041	call    _LCD_Init
+				;9		PAUSE(100);
+00A1	0F64	mov     a, 64H
+00A2	4084	mov     i, a
+00A3	5F05	clr     cmd
+00A4	2022	call    _PAUSE
+				;10		while(1)
+				;11		{
+				;12			LCD_CMD(0,0x80);
+				_L14:
+00A5	0F80	mov     a, 80H
+00A6	4085	mov     cmd, a
+00A7	5F06	clr     cmd[1]
+00A8	5F03	clr     RS
+00A9	5F04	clr     i
+00AA	2005	call    _LCD_CMD
+00AB	5F07	clr     _main_2
+				;13			for(i = 0;i < 16;i++)
+00B8	4707	mov     a, _main_2
+00B9	0A10	sub     a, 10H
+00BA	390A	snz     Z
+00BB	28AC	jmp     _L12
+				;14			{
+				;15				LCD_CMD(1,0x31);
 				_L12:
-0072	0F09	mov     a, 9H
-0073	4083	mov     data1, a
-0074	0FBD	mov     a, BDH
-0075	340B	clr     BP0
-0076	348B	clr     BP1
-0077	2065	call    L0065
-0078	348B	clr     BP1
-0079	340B	clr     BP0
-007A	5481	inc     rb
-007B	3D0A	sz      Z
-007C	5482	inc     rc
-				_L11:
-007D	4701	mov     a, rb
-007E	4204	sub     a, i[0]
-007F	4702	mov     a, rc
-0080	5205	sbc     a, i[1]
-0081	3B0A	snz     CZ
-0082	2872	jmp     _L12
-0083	0003	ret
-0084	0000	nop
-0085	0000	nop
-0086	0000	nop
-0087	0000	nop
-0088	0000	nop
-0089	0000	nop
-				L008A:
-008A	0000	nop
-008B	1785	sdz     ACC
-008C	288A	jmp     L008A
-008D	0003	ret
-				;15	}
-				;file C:\Users\L0614\Desktop\Holtek\LCD TEST\LCD_TEST\holtek_lcd.c
+00AC	0F31	mov     a, 31H
+00AD	4085	mov     cmd, a
+00AE	5F06	clr     cmd[1]
+00AF	0F01	mov     a, 1H
+00B0	4083	mov     RS, a
+00B1	5F04	clr     i
+00B2	2005	call    _LCD_CMD
+				;16				PAUSE(100);
+00B3	0F64	mov     a, 64H
+00B4	4084	mov     i, a
+00B5	5F05	clr     cmd
+00B6	2022	call    _PAUSE
+00B7	5487	inc     _main_2
+				;17			}
+				;18			LCD_CMD(0,0xC0);
+00BC	0FC0	mov     a, C0H
+00BD	4085	mov     cmd, a
+00BE	5F06	clr     cmd[1]
+00BF	5F03	clr     RS
+00C0	5F04	clr     i
+00C1	2005	call    _LCD_CMD
+00C2	5F07	clr     _main_2
+				;19			for(i = 0;i < 16;i++)
+00CF	4707	mov     a, _main_2
+00D0	0A10	sub     a, 10H
+00D1	390A	snz     Z
+00D2	28C3	jmp     _L15
+00D3	28A5	jmp     _L14
+00D4	28D4	jmp     $
+				;20			{
+				;21				LCD_CMD(1,0x32);
+				_L15:
+00C3	0F32	mov     a, 32H
+00C4	4085	mov     cmd, a
+00C5	5F06	clr     cmd[1]
+00C6	0F01	mov     a, 1H
+00C7	4083	mov     RS, a
+00C8	5F04	clr     i
+00C9	2005	call    _LCD_CMD
+				;22				PAUSE(100);
+00CA	0F64	mov     a, 64H
+00CB	4084	mov     i, a
+00CC	5F05	clr     cmd
+00CD	2022	call    _PAUSE
+00CE	5487	inc     _main_2
+				;23			}
+				;24		}
+				;25		
+				;26		
+				;27	}
+				;28	void PAUSE(unsigned short i)						
+				;29	{	unsigned short j;
+				;30		for (j=0;j<i;j++) GCC_DELAY(10000);				//Delay i*10mS 
+				_PAUSE:
+				_PAUSE:
+0022	5F01	clr     rb
+0023	5F02	clr     rc
+0024	2830	jmp     _L8
+				_L9:
+0025	0F09	mov     a, 9H
+0026	4083	mov     RS, a
+0027	0FBD	mov     a, BDH
+0028	340B	clr     BP0
+0029	348B	clr     BP1
+002A	2018	call    L0018
+002B	348B	clr     BP1
+002C	340B	clr     BP0
+002D	5481	inc     rb
+002E	3D0A	sz      Z
+002F	5482	inc     rc
+				_L8:
+0030	4701	mov     a, rb
+0031	4204	sub     a, i[0]
+0032	4702	mov     a, rc
+0033	5205	sbc     a, i[1]
+0034	3B0A	snz     CZ
+0035	2825	jmp     _L9
+0036	0003	ret
+0037	0000	nop
+0038	0000	nop
+0039	0000	nop
+003A	0000	nop
+003B	0000	nop
+003C	0000	nop
+				L003D:
+003D	0000	nop
+003E	1785	sdz     ACC
+003F	283D	jmp     L003D
+0040	0003	ret
+				;31	}
+				;file C:\Users\L0614\Desktop\Holtek\Holtek-HT66F70A-LCD\LCD_TEST\holtek_lcd.c
 				;1	#include "HT66F70A.h"
 				;2	#include "holtek_lcd.h"
 				;3	#include <string.h>
 				;4	// E = PE0 | RS = PE1 | R/W = GND | DATA = PD
-				;5	#define LCM_EN			_pe0
-				;6	#define LCM_ENC			_pec0
-				;7	#define LCM_RS			_pe1
-				;8	#define LCM_RSC			_pec1
-				;9	#define LCM_DataPort	_pd
-				;10	#define LCM_DataPortC	_pdc
-				;11	
-				;12	void LCD_Init(void)
-				;13	{
-				;14		GCC_DELAY(30000);
+				;5	#define LCD_EN			_pe0
+				;6	#define LCD_ENC			_pec0
+				;7	#define LCD_RS			_pe1
+				;8	#define LCD_RSC			_pec1
+				;9	//#define LCD_RW			_pe2
+				;10	//#define LCD_RWC			_pec2
+				;11	#define LCD_DataPort	_pd
+				;12	#define LCD_DataPortC	_pdc
+				;13	
+				;14	void LCD_Init(void)
+				;15	{
+				;16		LCD_EN = 0;
 				_LCD_Init:
 				_LCD_Init:
-008E	0F1D	mov     a, 1DH
-008F	4083	mov     data1, a
-0090	0F3B	mov     a, 3BH
-0091	340B	clr     BP0
-0092	348B	clr     BP1
-0093	2065	call    L0065
-0094	348B	clr     BP1
-0095	340B	clr     BP0
-				;15		LCD_CMD(0x33);
-0096	0F33	mov     a, 33H
-0097	202D	call    _LCD_CMD
-				;16		LCD_CMD(0x32);
-0098	0F32	mov     a, 32H
-0099	202D	call    _LCD_CMD
-				;17		LCD_CMD(0x28);
-009A	0F28	mov     a, 28H
-009B	202D	call    _LCD_CMD
-				;18		GCC_DELAY(1000);
-009C	0FF8	mov     a, F8H
-009D	340B	clr     BP0
-009E	348B	clr     BP1
-009F	208A	call    L008A
-00A0	348B	clr     BP1
-00A1	340B	clr     BP0
-				;19		LCD_CMD(0x0C);
-00A2	0F0C	mov     a, CH
-00A3	202D	call    _LCD_CMD
-				;20		GCC_DELAY(1000);
-00A4	0FF8	mov     a, F8H
-00A5	340B	clr     BP0
-00A6	348B	clr     BP1
-00A7	208A	call    L008A
-00A8	348B	clr     BP1
-00A9	340B	clr     BP0
-				;21		LCD_CMD(0x01);
-00AA	0F01	mov     a, 1H
-00AB	202D	call    _LCD_CMD
-				;22		GCC_DELAY(1000);
-00AC	0FF8	mov     a, F8H
-00AD	340B	clr     BP0
-00AE	348B	clr     BP1
-00AF	208A	call    L008A
-00B0	348B	clr     BP1
-00B1	340B	clr     BP0
-				;23		LCD_CMD(0x06);
-00B2	0F06	mov     a, 6H
-00B3	202D	call    _LCD_CMD
-				;24		GCC_DELAY(10000);
-00B4	0F09	mov     a, 9H
-00B5	4083	mov     data1, a
-00B6	0FBD	mov     a, BDH
-00B7	340B	clr     BP0
-00B8	348B	clr     BP1
-00B9	2065	call    L0065
-00BA	348B	clr     BP1
-00BB	340B	clr     BP0
-				;25		LCD_CMD(0x80);
-00BC	0F80	mov     a, 80H
-00BD	202D	call    _LCD_CMD
-				;26		GCC_DELAY(10000);	
-00BE	0F09	mov     a, 9H
-00BF	4083	mov     data1, a
-00C0	0FBD	mov     a, BDH
-00C1	340B	clr     BP0
-00C2	348B	clr     BP1
-00C3	2065	call    L0065
-00C4	348B	clr     BP1
-00C5	340B	clr     BP0
-00C6	0003	ret
-				;27	}
-				;28	char LCD_BUSY(void)
-				;29	{
-				;30	   char busy;
-				;31	   
-				;32	   //LCM_RW = 1;
-				;33	   LCM_RS = 0;
-				;34	   LCM_EN = 1;
-				;35	   GCC_DELAY(5);
-				;36	   
-				;37	   LCM_RSC = 0;
-				;38	   LCM_ENC = 0;
-				;39	   
-				;40	   GCC_DELAY(5); 
-				;41	   LCM_EN = 0; 
-				;42	   return (busy);
-				;43	}
-				;44	void LCD_CMD(char cmd)
-				;45	{ 
+0041	3422	clr     PE0
+				;17		LCD_RS = 0;
+0042	34A2	clr     PE1
+				;18		LCD_ENC = 0;
+0043	3423	clr     PEC0
+				;19		LCD_RSC = 0;
+0044	34A3	clr     PEC1
+				;20		GCC_DELAY(15000);
+0045	0F0E	mov     a, EH
+0046	4083	mov     RS, a
+0047	0F9C	mov     a, 9CH
+0048	340B	clr     BP0
+0049	348B	clr     BP1
+004A	2016	call    L0016
+004B	348B	clr     BP1
+004C	340B	clr     BP0
+				;21		LCD_CMD(0,0x38);
+004D	0F38	mov     a, 38H
+004E	4085	mov     cmd, a
+004F	5F06	clr     cmd[1]
+0050	5F03	clr     RS
+0051	5F04	clr     i
+0052	2005	call    _LCD_CMD
+				;22		GCC_DELAY(4100);
+0053	0F03	mov     a, 3H
+0054	4083	mov     RS, a
+0055	0FFD	mov     a, FDH
+0056	340B	clr     BP0
+0057	348B	clr     BP1
+0058	2018	call    L0018
+0059	348B	clr     BP1
+005A	340B	clr     BP0
+				;23		LCD_CMD(0,0x38);
+005B	0F38	mov     a, 38H
+005C	4085	mov     cmd, a
+005D	5F06	clr     cmd[1]
+005E	5F03	clr     RS
+005F	5F04	clr     i
+0060	2005	call    _LCD_CMD
+				;24		GCC_DELAY(1000);
+0061	0FF8	mov     a, F8H
+0062	340B	clr     BP0
+0063	348B	clr     BP1
+0064	203D	call    L003D
+0065	348B	clr     BP1
+0066	340B	clr     BP0
+				;25		LCD_CMD(0,0x38);
+0067	0F38	mov     a, 38H
+0068	4085	mov     cmd, a
+0069	5F06	clr     cmd[1]
+006A	5F03	clr     RS
+006B	5F04	clr     i
+006C	2005	call    _LCD_CMD
+				;26		GCC_DELAY(1000);
+006D	0FF8	mov     a, F8H
+006E	340B	clr     BP0
+006F	348B	clr     BP1
+0070	203D	call    L003D
+0071	348B	clr     BP1
+0072	340B	clr     BP0
+				;27		LCD_CMD(0,0x38);
+0073	0F38	mov     a, 38H
+0074	4085	mov     cmd, a
+0075	5F06	clr     cmd[1]
+0076	5F03	clr     RS
+0077	5F04	clr     i
+0078	2005	call    _LCD_CMD
+				;28		GCC_DELAY(1000);
+0079	0FF8	mov     a, F8H
+007A	340B	clr     BP0
+007B	348B	clr     BP1
+007C	203D	call    L003D
+007D	348B	clr     BP1
+007E	340B	clr     BP0
+				;29		LCD_CMD(0,0x08);
+007F	0F08	mov     a, 8H
+0080	4085	mov     cmd, a
+0081	5F06	clr     cmd[1]
+0082	5F03	clr     RS
+0083	5F04	clr     i
+0084	2005	call    _LCD_CMD
+				;30		LCD_CMD(0,0x01);
+0085	0F01	mov     a, 1H
+0086	4085	mov     cmd, a
+0087	5F06	clr     cmd[1]
+0088	5F03	clr     RS
+0089	5F04	clr     i
+008A	2005	call    _LCD_CMD
+				;31		LCD_CMD(0,0x06);
+008B	0F06	mov     a, 6H
+008C	4085	mov     cmd, a
+008D	5F06	clr     cmd[1]
+008E	5F03	clr     RS
+008F	5F04	clr     i
+0090	2005	call    _LCD_CMD
+				;32		LCD_CMD(0,0x0C);
+0091	0F0C	mov     a, CH
+0092	4085	mov     cmd, a
+0093	5F06	clr     cmd[1]
+0094	5F03	clr     RS
+0095	5F04	clr     i
+0096	2005	call    _LCD_CMD
+				;33		GCC_DELAY(2000);
+0097	0F01	mov     a, 1H
+0098	4083	mov     RS, a
+0099	0FF1	mov     a, F1H
+009A	340B	clr     BP0
+009B	348B	clr     BP1
+009C	2018	call    L0018
+009D	348B	clr     BP1
+009E	340B	clr     BP0
+009F	0003	ret
+				;34	}
+				;35	void LCD_CMD(unsigned short RS,unsigned short cmd)
+				;36	{ 
+				;37		LCD_DataPortC = 0;
 				_LCD_CMD:
 				_LCD_CMD:
-002D	4083	mov     cmd[0], a
-				;46		LCM_EN = 0;
-002E	3422	clr     PE0
-				;47		LCM_DataPortC = 0;
-002F	1F1F	clr     PDC
-				;48		GCC_DELAY(5);
-0030	0000	nop
-0031	0000	nop
-0032	0000	nop
-0033	0000	nop
-0034	0000	nop
-				;49		//LCM_RW = 0;
-				;50		GCC_DELAY(5);
-0035	0000	nop
-0036	0000	nop
-0037	0000	nop
-0038	0000	nop
-0039	0000	nop
-				;51		LCM_DataPort = cmd;
-003A	4703	mov     a, cmd[0]
-003B	009E	mov     PD, a
-				;52		
-				;53		GCC_DELAY(5);
-003C	0000	nop
-003D	0000	nop
-003E	0000	nop
-003F	0000	nop
-0040	0000	nop
-				;54		LCM_EN = 1;
-0041	3022	set     PE0
-				;55		GCC_DELAY(5);
-0042	0000	nop
-0043	0000	nop
-0044	0000	nop
-0045	0000	nop
-0046	0000	nop
-				;56		LCM_EN = 0;
-0047	3422	clr     PE0
-				;57		GCC_DELAY(5);
-0048	0000	nop
-0049	0000	nop
-004A	0000	nop
-004B	0000	nop
-004C	0000	nop
-004D	0003	ret
-				;58	}
-				;59	void LCD_DATA(char data1)
-				;60	{
-				_LCD_DATA:
-				_LCD_DATA:
-0017	4083	mov     data1[0], a
-				;61		LCM_RS = 1;
-0018	30A2	set     PE1
-				;62		GCC_DELAY(5);
+0005	1F1F	clr     PDC
+				;38		LCD_RS = RS;
+0006	4703	mov     a, RS[0]
+0007	0E01	and     a, 1H
+0008	4080	mov     ra, a
+0009	4700	mov     a, ra
+000A	4380	addm    a, ra
+000B	34A2	clr     PE1
+000C	4700	mov     a, ra
+000D	05A2	orm     a, PE
+				;39		LCD_DataPort = cmd;
+000E	4705	mov     a, cmd[0]
+000F	009E	mov     PD, a
+				;40		LCD_EN = 1;
+0010	3022	set     PE0
+				;41		_nop();
+0011	0000	nop
+				;42		LCD_EN = 0;
+0012	3422	clr     PE0
+0013	0003	ret
+0014	0000	nop
+0015	0000	nop
+				L0016:
+0016	0000	nop
+0017	0000	nop
+				L0018:
+0018	0000	nop
+				L0019:
 0019	0000	nop
-001A	0000	nop
-001B	0000	nop
+001A	1785	sdz     ACC
+001B	2819	jmp     L0019
+				L001C:
 001C	0000	nop
-001D	0000	nop
-				;63		LCM_DataPort = data1;		
-001E	4703	mov     a, data1[0]
-001F	009E	mov     PD, a
-				;64		GCC_DELAY(5);
-0020	0000	nop
-0021	0000	nop
-0022	0000	nop
-0023	0000	nop
-0024	0000	nop
-				;65		LCM_EN = 1;
-0025	3022	set     PE0
-				;66		GCC_DELAY(5);
-0026	0000	nop
-0027	0000	nop
-0028	0000	nop
-0029	0000	nop
-002A	0000	nop
-				;67		LCM_EN = 0;
-002B	3422	clr     PE0
-002C	0003	ret
-				;68	}
-				;69	void LCD_Str(char addr1,char *str)
-				;70	{
-				_LCD_Str:
-				_LCD_Str:
-004E	4080	mov     ra, a
-004F	4086	mov     addr1[0], a
-				;71		LCD_CMD(addr1);
-0050	4700	mov     a, ra
-0051	202D	call    _LCD_CMD
-				;72		while(*str !=0)
-0052	2858	jmp     L0058
-				L0058:
-0058	4704	mov     a, str[0]
-0059	0083	mov     MP1L, a
-005A	4705	mov     a, str[1]
-005B	0084	mov     MP1H, a
-005C	200A	call    L000A
-005D	4080	mov     ra, a
-005E	5080	sz      ra
-005F	2853	jmp     L0053
-0060	0003	ret
-0061	0000	nop
-0062	0000	nop
-0063	0000	nop
-0064	0000	nop
-				L0065:
-0065	0000	nop
-				L0066:
-0066	0000	nop
-0067	1785	sdz     ACC
-0068	2866	jmp     L0066
-				L0069:
-0069	0000	nop
-006A	1785	sdz     ACC
-006B	2869	jmp     L0069
-006C	5783	sdz     data1
-006D	2869	jmp     L0069
-006E	0003	ret
-				;73		{
-				;74			LCD_DATA(*str++);
-				L0053:
-0053	5484	inc     str[0]
-0054	3D0A	sz      Z
-0055	5485	inc     str[1]
-0056	4700	mov     a, ra
-0057	2017	call    _LCD_DATA
-				;75		}
-				;76	}
-				;77	void LCD_Chr(char col,char chrx)
-				;78	{
-				;79		LCD_CMD(col);         
-				;80		LCD_DATA(chrx);	                    
-				;81	}
+001D	1785	sdz     ACC
+001E	281C	jmp     L001C
+001F	5783	sdz     RS[0]
+0020	281C	jmp     L001C
+0021	0003	ret
+				;43	}
+				;44	
+				;45	void DELAY_MS(unsigned short i)						
+				;46	{	unsigned short j;
+				;47		for (j=0;j<i;j++) GCC_DELAY(1000);				//Delay i*10mS 
+				;48	}
 				data .SECTION 'DATA'
 				__pd DB DUP (?) ; __pd
 				__pdc DB DUP (?) ; __pdc
@@ -347,6 +323,7 @@
 				ra DB DUP (?)
 				rb DB DUP (?)
 				rc DB DUP (?)
-				data1 DB DUP (?) ; data1
+				RS DB 2 DUP (?) ; RS
 				i DB 2 DUP (?) ; i
-				addr1 DB DUP (?) ; addr1
+				cmd DB 2 DUP (?) ; cmd
+				_main_2 DB DUP (?)

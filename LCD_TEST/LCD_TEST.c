@@ -4,10 +4,26 @@
 void PAUSE(unsigned short i);
 void main()
 {	
+	unsigned short i;
 	LCD_Init();
 	PAUSE(100);
-	LCD_Str(0x80, "ABCDEF");
-	PAUSE(1000);
+	while(1)
+	{
+		LCD_CMD(0,0x80);
+		for(i = 0;i < 16;i++)
+		{
+			LCD_CMD(1,0x31);
+			PAUSE(100);
+		}
+		LCD_CMD(0,0xC0);
+		for(i = 0;i < 16;i++)
+		{
+			LCD_CMD(1,0x32);
+			PAUSE(100);
+		}
+	}
+	
+	
 }
 void PAUSE(unsigned short i)						
 {	unsigned short j;
