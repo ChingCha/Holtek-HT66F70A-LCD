@@ -13,20 +13,21 @@ unsigned short LCD_Write(unsigned char, unsigned char);
 void PAUSE(unsigned short);
 static void Str_To_Lcd(char *pData, unsigned int count);
 void Lcd_Write_String(unsigned int line, unsigned int col, char *pText);
+void Lcd_Clear(void);
+void Lcd_Write_Char(unsigned int line, unsigned int col, char Text);
 void main()
 {	unsigned short i;
-	LCD_Init();				                     //LCM Initialization
+	LCD_Init();
 	while(1)
 	{	
-		LCD_Write(0,0x01);
+		Lcd_Clear();
 		PAUSE(100);
-		LCD_Write(0,0x80);						      //Clear LCM Display						
+		char c = 'K';					
 		for(i=0;i<16;i++)
-		{	Lcd_Write_String(1,i,"S"); PAUSE(10);        //Dispay "1"
+		{	Lcd_Write_String(1,i,"S"); PAUSE(10);
 		}
-		LCD_Write(0,0xC0);					         //Set Line 2, Position 0
 		for(i=0;i<16;i++) 
-		{	LCD_Write(1,0x32); PAUSE(10);	      //Dispay "2"
+		{	Lcd_Write_Char(2,i,c); PAUSE(10);
 		}
 		PAUSE(100);  
 	}
@@ -35,8 +36,8 @@ void LCD_Init(void)
 {	LCD_EN=0; LCD_RW=0; LCD_RS=0;	            //Clear EN/RW/RS Pin
 	LCD_ENC=0; LCD_RWC=0; LCD_RSC=0;	         //Config EN/RW/RS O/PAUSE
 	GCC_DELAY(50000);							         //LCM Power-On Time
-	LCD_Write(0,0x28);							      //COMD:8-Bit, 2-Line, 5*7
-	LCD_Write(0,0x0F);						         //COMD:Display/Cursor Blinking On
+	LCD_Write(0,0x28);
+	LCD_Write(0,0x08);						         //COMD:Display/Cursor Blinking On
 	LCD_Write(0,0x06);							      //COMD:Increment, Not Shift
 	LCD_Write(0,0x01);							      //COMD:Clear LCM Display
 }
@@ -67,4 +68,14 @@ void Lcd_Write_String(unsigned int line, unsigned int col, char *pText)
 	if(line == 1) 	LCD_Write(0,0x80 + col);
 	if(line == 2) 	LCD_Write(0,0xC0 + col);
 	Str_To_Lcd(pText, strlen(pText));
+}
+void Lcd_Clear(void)
+{
+	LCD_Write(0,0x01);
+}
+void Lcd_Write_Char(unsigned int line, unsigned int col, char Text)
+{
+	if(line == 1) 	LCD_Write(0,0x80 + col);
+	if(line == 2) 	LCD_Write(0,0xC0 + col);
+	LCD_Write(1,Text);
 }

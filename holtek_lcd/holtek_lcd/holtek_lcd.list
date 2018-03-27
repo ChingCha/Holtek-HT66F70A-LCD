@@ -14,217 +14,217 @@
 				;13	void PAUSE(unsigned short);
 				;14	static void Str_To_Lcd(char *pData, unsigned int count);
 				;15	void Lcd_Write_String(unsigned int line, unsigned int col, char *pText);
-				;16	void main()
-				;17	{	unsigned short i;
+				;16	void Lcd_Clear(void);
+				;17	void Lcd_Write_Char(unsigned int line, unsigned int col, char Text);
+				;18	void main()
+				;19	{	unsigned short i;
 				@code .SECTION 'CODE'
 				include HT66F50.inc
 0000	2801	jmp     _main_startup1
 				@start .SECTION 'CODE'
 				_main_startup1:
 				@start .SECTION 'CODE'
-0001	288B	jmp     _main
+0001	28A8	jmp     _main
 0002	0053	jmp     L0053
-				;18		LCD_Init();				                     //LCM Initialization
+				;20		LCD_Init();				                     //LCM Initialization
 				_main:
 				_main:
-008B	201E	call    _LCD_Init
-				;19		while(1)
-				;20		{	
-				;21			LCD_Write(0,0x01);
-				_L19:
-008C	0F01	mov     a, 1H
-008D	4085	mov     CD, a
-008E	0F00	mov     a, 0H
-008F	2003	call    _LCD_Write
-				;22			PAUSE(100);
-0090	0F64	mov     a, 64H
-0091	4086	mov     i, a
-0092	5F07	clr     pData
-0093	2057	call    _PAUSE
-				;23			LCD_Write(0,0x80);						      //Clear LCM Display						
-0094	0F80	mov     a, 80H
-0095	4085	mov     CD, a
-0096	0F00	mov     a, 0H
-0097	2003	call    _LCD_Write
-				;24			for(i=0;i<16;i++)
-0098	5F15	clr     i[0]
-0099	5F16	clr     i[1]
-00AA	5495	inc     i[0]
-00AB	3D0A	sz      Z
-00AC	5496	inc     i[1]
-00AD	4715	mov     a, i[0]
-00AE	0C10	xor     a, 10H
-00AF	4516	or      a, i[1]
-00B0	390A	snz     Z
-00B1	289A	jmp     _L16
-				;25			{	Lcd_Write_String(1,i,"S"); PAUSE(10);        //Dispay "1"
-				_L16:
-009A	0F04	mov     a, 4H
-009B	4093	mov     pText, a
-009C	0F80	mov     a, 80H
-009D	4094	mov     pText[1], a
-009E	4715	mov     a, i[0]
-009F	4091	mov     col, a
-00A0	4716	mov     a, i[1]
-00A1	4092	mov     col[1], a
-00A2	0F01	mov     a, 1H
-00A3	408F	mov     line, a
-00A4	5F10	clr     line[1]
-00A5	2069	call    _Lcd_Write_String
-00A6	0F0A	mov     a, AH
-00A7	4086	mov     i, a
-00A8	5F07	clr     pData
-00A9	2057	call    _PAUSE
-				;26			}
-				;27			LCD_Write(0,0xC0);					         //Set Line 2, Position 0
-00B2	0FC0	mov     a, C0H
-00B3	4085	mov     CD, a
-00B4	0F00	mov     a, 0H
-00B5	2003	call    _LCD_Write
-00B6	5F15	clr     i[0]
-				;28			for(i=0;i<16;i++) 
-00C0	4715	mov     a, i[0]
-00C1	0A10	sub     a, 10H
-00C2	390A	snz     Z
-00C3	28B7	jmp     _L18
-				;29			{	LCD_Write(1,0x32); PAUSE(10);	      //Dispay "2"
-				_L18:
-00B7	0F32	mov     a, 32H
-00B8	4085	mov     CD, a
-00B9	0F01	mov     a, 1H
-00BA	2003	call    _LCD_Write
-00BB	0F0A	mov     a, AH
-00BC	4086	mov     i, a
-00BD	5F07	clr     pData
-00BE	2057	call    _PAUSE
-00BF	5495	inc     i[0]
-				;30			}
-				;31			PAUSE(100);  
-00C4	0F64	mov     a, 64H
-00C5	4086	mov     i, a
-00C6	5F07	clr     pData
-00C7	2057	call    _PAUSE
-				;32		}
-00C8	288C	jmp     _L19
-00C9	28C9	jmp     $
+00A8	201E	call    _LCD_Init
+				;21		while(1)
+				;22		{	
+				;23			Lcd_Clear();
+				_L24:
+00A9	208B	call    _Lcd_Clear
+				;24			PAUSE(100);
+00AA	0F64	mov     a, 64H
+00AB	4086	mov     i, a
+00AC	5F07	clr     line
+00AD	2057	call    _PAUSE
+				;25			char c = 'K';					
+				;26			for(i=0;i<16;i++)
+00AE	5F15	clr     _main_2
+00AF	5F16	clr     _main_2[1]
+00C0	5495	inc     _main_2
+00C1	3D0A	sz      Z
+00C2	5496	inc     _main_2[1]
+00C3	4715	mov     a, _main_2
+00C4	0C10	xor     a, 10H
+00C5	4516	or      a, _main_2[1]
+00C6	390A	snz     Z
+00C7	28B0	jmp     _L21
+00C8	5F15	clr     _main_2
+00C9	5F16	clr     _main_2[1]
+				;27			{	Lcd_Write_String(1,i,"S"); PAUSE(10);        //Dispay "1"
+				_L21:
+00B0	0F04	mov     a, 4H
+00B1	4093	mov     pText, a
+00B2	0F80	mov     a, 80H
+00B3	4094	mov     pText[1], a
+00B4	4715	mov     a, _main_2
+00B5	4091	mov     col, a
+00B6	4716	mov     a, _main_2[1]
+00B7	4092	mov     col[1], a
+00B8	0F01	mov     a, 1H
+00B9	408F	mov     line, a
+00BA	5F10	clr     line[1]
+00BB	2069	call    _Lcd_Write_String
+00BC	0F0A	mov     a, AH
+00BD	4086	mov     i, a
+00BE	5F07	clr     line
+00BF	2057	call    _PAUSE
+				;28			}
+				;29			for(i=0;i<16;i++) 
+00D8	5495	inc     _main_2
+00D9	3D0A	sz      Z
+00DA	5496	inc     _main_2[1]
+00DB	4715	mov     a, _main_2
+00DC	0C10	xor     a, 10H
+00DD	4516	or      a, _main_2[1]
+00DE	390A	snz     Z
+00DF	28CA	jmp     _L23
+				;30			{	Lcd_Write_Char(2,i,c); PAUSE(10);	      //Dispay "2"
+				_L23:
+00CA	0F4B	mov     a, 4BH
+00CB	408B	mov     Text, a
+00CC	4715	mov     a, _main_2
+00CD	4089	mov     col, a
+00CE	4716	mov     a, _main_2[1]
+00CF	408A	mov     col[1], a
+00D0	0F02	mov     a, 2H
+00D1	4087	mov     line, a
+00D2	5F08	clr     line[1]
+00D3	2090	call    _Lcd_Write_Char
+00D4	0F0A	mov     a, AH
+00D5	4086	mov     i, a
+00D6	5F07	clr     line
+00D7	2057	call    _PAUSE
+				;31			}
+				;32			PAUSE(100);  
+00E0	0F64	mov     a, 64H
+00E1	4086	mov     i, a
+00E2	5F07	clr     line
+00E3	2057	call    _PAUSE
+				;33		}
+00E4	28A9	jmp     _L24
+00E5	28E5	jmp     $
 				@dummy .SECTION 'CODE'
-00CA	0000	nop
-00CB	0000	nop
-				L00CC:
-00CC	0000	nop
-00CD	0000	nop
-				L00CE:
-00CE	0000	nop
-				L00CF:
-00CF	0000	nop
-00D0	1785	sdz     ACC
-00D1	28CF	jmp     L00CF
-				L00D2:
-00D2	0000	nop
-00D3	1785	sdz     ACC
-00D4	28D2	jmp     L00D2
-00D5	5785	sdz     CD
-00D6	28D2	jmp     L00D2
-00D7	0003	ret
-				L00D8:
-00D8	4705	mov     a, CD
-00D9	4081	mov     rb, a
-00DA	4706	mov     a, i
-00DB	4082	mov     rc, a
-				L00DC:
-00DC	4701	mov     a, rb
-00DD	0083	mov     MP1, a
-00DE	4702	mov     a, rc
-00DF	0081	mov     MP0, a
-00E0	20F7	call    L00F7
-00E1	4080	mov     ra, a
-00E2	5481	inc     rb
-00E3	3D0A	sz      Z
-00E4	5482	inc     rc
-00E5	5080	sz      ra
-00E6	28DC	jmp     L00DC
-00E7	4705	mov     a, CD
-00E8	4083	mov     rd, a
-00E9	4706	mov     a, i
-00EA	4084	mov     re, a
-00EB	4183	cpl     rd
-00EC	4184	cpl     re
-00ED	4703	mov     a, rd
-00EE	4381	addm    a, rb
-00EF	4704	mov     a, re
-00F0	5382	adcm    a, rc
-00F1	4701	mov     a, rb
-00F2	4080	mov     ra, a
-00F3	4702	mov     a, rc
-00F4	4081	mov     rb, a
-00F5	0003	ret
-00F6	1483	inc     MP1
-				L00F7:
-00F7	3F81	sz      MP0.7
-00F8	28FD	jmp     L00FD
-00F9	0701	mov     a, MP0
-00FA	0084	mov     BP, a
-00FB	0702	mov     a, [02H]
-00FC	0003	ret
-				L00FD:
-00FD	1B01	rrca    MP0
-00FE	0E3F	and     a, 3FH
-00FF	0089	mov     TBHP, a
-0100	1B03	rrca    MP1
-0101	0087	mov     TBLP, a
-0102	1D05	tabrd   ACC
-0103	3C0A	sz      C
-0104	0708	mov     a, TBLH
-0105	0003	ret
-				;33	}
-				;34	void LCD_Init(void)
-				;35	{	LCD_EN=0; LCD_RW=0; LCD_RS=0;	            //Clear EN/RW/RS Pin
+00E6	0000	nop
+00E7	0000	nop
+				L00E8:
+00E8	0000	nop
+00E9	0000	nop
+				L00EA:
+00EA	0000	nop
+				L00EB:
+00EB	0000	nop
+00EC	1785	sdz     ACC
+00ED	28EB	jmp     L00EB
+				L00EE:
+00EE	0000	nop
+00EF	1785	sdz     ACC
+00F0	28EE	jmp     L00EE
+00F1	5785	sdz     CD
+00F2	28EE	jmp     L00EE
+00F3	0003	ret
+				L00F4:
+00F4	4705	mov     a, CD
+00F5	4081	mov     rb, a
+00F6	4706	mov     a, i
+00F7	4082	mov     rc, a
+				L00F8:
+00F8	4701	mov     a, rb
+00F9	0083	mov     MP1, a
+00FA	4702	mov     a, rc
+00FB	0081	mov     MP0, a
+00FC	2113	call    L0113
+00FD	4080	mov     ra, a
+00FE	5481	inc     rb
+00FF	3D0A	sz      Z
+0100	5482	inc     rc
+0101	5080	sz      ra
+0102	28F8	jmp     L00F8
+0103	4705	mov     a, CD
+0104	4083	mov     rd, a
+0105	4706	mov     a, i
+0106	4084	mov     re, a
+0107	4183	cpl     rd
+0108	4184	cpl     re
+0109	4703	mov     a, rd
+010A	4381	addm    a, rb
+010B	4704	mov     a, re
+010C	5382	adcm    a, rc
+010D	4701	mov     a, rb
+010E	4080	mov     ra, a
+010F	4702	mov     a, rc
+0110	4081	mov     rb, a
+0111	0003	ret
+0112	1483	inc     MP1
+				L0113:
+0113	3F81	sz      MP0.7
+0114	2919	jmp     L0119
+0115	0701	mov     a, MP0
+0116	0084	mov     BP, a
+0117	0702	mov     a, [02H]
+0118	0003	ret
+				L0119:
+0119	1B01	rrca    MP0
+011A	0E3F	and     a, 3FH
+011B	0089	mov     TBHP, a
+011C	1B03	rrca    MP1
+011D	0087	mov     TBLP, a
+011E	1D05	tabrd   ACC
+011F	3C0A	sz      C
+0120	0708	mov     a, TBLH
+0121	0003	ret
+				;34	}
+				;35	void LCD_Init(void)
+				;36	{	LCD_EN=0; LCD_RW=0; LCD_RS=0;	            //Clear EN/RW/RS Pin
 				_LCD_Init:
 				_LCD_Init:
 001E	3426	clr     PE0
 001F	3526	clr     PE2
 0020	34A6	clr     PE1
-				;36		LCD_ENC=0; LCD_RWC=0; LCD_RSC=0;	         //Config EN/RW/RS O/PAUSE
+				;37		LCD_ENC=0; LCD_RWC=0; LCD_RSC=0;	         //Config EN/RW/RS O/PAUSE
 0021	3427	clr     PEC0
 0022	3527	clr     PEC2
 0023	34A7	clr     PEC1
-				;37		GCC_DELAY(50000);							         //LCM Power-On Time
+				;38		GCC_DELAY(50000);							         //LCM Power-On Time
 0024	0F30	mov     a, 30H
 0025	4085	mov     CD, a
 0026	0FBA	mov     a, BAH
-0027	20CC	call    L00CC
-				;38		LCD_Write(0,0x28);							      //COMD:8-Bit, 2-Line, 5*7
+0027	20E8	call    L00E8
+				;39		LCD_Write(0,0x28);
 0028	0F28	mov     a, 28H
 0029	4085	mov     CD, a
 002A	0F00	mov     a, 0H
 002B	2003	call    _LCD_Write
-				;39		LCD_Write(0,0x0F);						         //COMD:Display/Cursor Blinking On
-002C	0F0F	mov     a, FH
+				;40		LCD_Write(0,0x08);						         //COMD:Display/Cursor Blinking On
+002C	0F08	mov     a, 8H
 002D	4085	mov     CD, a
 002E	0F00	mov     a, 0H
 002F	2003	call    _LCD_Write
-				;40		LCD_Write(0,0x06);							      //COMD:Increment, Not Shift
+				;41		LCD_Write(0,0x06);							      //COMD:Increment, Not Shift
 0030	0F06	mov     a, 6H
 0031	4085	mov     CD, a
 0032	0F00	mov     a, 0H
 0033	2003	call    _LCD_Write
-				;41		LCD_Write(0,0x01);							      //COMD:Clear LCM Display
+				;42		LCD_Write(0,0x01);							      //COMD:Clear LCM Display
 0034	0F01	mov     a, 1H
 0035	4085	mov     CD, a
 0036	0F00	mov     a, 0H
 0037	2003	call    _LCD_Write
 0038	0003	ret
-				;42	}
-				;43	unsigned short LCD_Write(unsigned char DCFlag, unsigned char CD)
-				;44	{	
+				;43	}
+				;44	unsigned short LCD_Write(unsigned char DCFlag, unsigned char CD)
+				;45	{	
 				_LCD_Write:
 				_LCD_Write:
 0003	4086	mov     DCFlag[0], a
-				;45		LCD_DataPortC=0;								   //Config Port as O/P Mode
+				;46		LCD_DataPortC=0;								   //Config Port as O/P Mode
 0004	1F24	clr     PDC
-				;46		LCD_RW=0;										   //RW=0 (Write)
+				;47		LCD_RW=0;										   //RW=0 (Write)
 0005	3526	clr     PE2
-				;47		LCD_RS=DCFlag;									   //Set RS State By DCFlag
+				;48		LCD_RS=DCFlag;									   //Set RS State By DCFlag
 0006	4706	mov     a, DCFlag[0]
 0007	0E01	and     a, 1H
 0008	4080	mov     ra, a
@@ -233,14 +233,14 @@
 000B	34A6	clr     PE1
 000C	4700	mov     a, ra
 000D	05A6	orm     a, PE
-				;48		LCD_DataPort=CD;								   //Sent Command or Data
+				;49		LCD_DataPort=CD;								   //Sent Command or Data
 000E	4705	mov     a, CD[0]
 000F	00A3	mov     PD, a
-				;49		LCD_EN=1; _nop(); LCD_EN=0;			      //EN=1
+				;50		LCD_EN=1; _nop(); LCD_EN=0;			      //EN=1
 0010	3026	set     PE0
 0011	0000	nop
 0012	3426	clr     PE0
-				;50		LCD_DataPort= CD << 4;								   //Sent Command or Data
+				;51		LCD_DataPort= CD << 4;								   //Sent Command or Data
 0013	4705	mov     a, CD[0]
 0014	4080	mov     ra, a
 0015	5100	swapa   ra
@@ -248,15 +248,15 @@
 0017	4080	mov     ra, a
 0018	4700	mov     a, ra
 0019	00A3	mov     PD, a
-				;51		LCD_EN=1; _nop(); LCD_EN=0;			      //EN=1	
+				;52		LCD_EN=1; _nop(); LCD_EN=0;			      //EN=1	
 001A	3026	set     PE0
 001B	0000	nop
 001C	3426	clr     PE0
 001D	0003	ret
-				;52	}
-				;53	void PAUSE(unsigned short i)						
-				;54	{	unsigned short j;
-				;55		for (j=0;j<i;j++) GCC_DELAY(10000);				//Delay i*10mS 
+				;53	}
+				;54	void PAUSE(unsigned short i)						
+				;55	{	unsigned short j;
+				;56		for (j=0;j<i;j++) GCC_DELAY(10000);				//Delay i*10mS 
 				_PAUSE:
 				_PAUSE:
 0057	5F01	clr     rb
@@ -266,7 +266,7 @@
 005A	0F09	mov     a, 9H
 005B	4085	mov     CD, a
 005C	0FBE	mov     a, BEH
-005D	20CE	call    L00CE
+005D	20EA	call    L00EA
 005E	5481	inc     rb
 005F	3D0A	sz      Z
 0060	5482	inc     rc
@@ -279,53 +279,53 @@
 0066	390A	snz     Z
 0067	285A	jmp     _L9
 0068	0003	ret
-				;56	}
-				;57	
-				;58	static void Str_To_Lcd(char *pData, unsigned int count)
-				;59	{
+				;57	}
+				;58	
+				;59	static void Str_To_Lcd(char *pData, unsigned int count)
+				;60	{
 				_Str_To_Lcd:
 				_Str_To_Lcd:
 0039	4707	mov     a, pData[0]
-003A	408B	mov     count[2], a
+003A	408B	mov     Text, a
 003B	4708	mov     a, pData[1]
-003C	408C	mov     count[3], a
+003C	408C	mov     Text[1], a
 003D	4709	mov     a, count[0]
-003E	430B	add     a, count[2]
-003F	408D	mov     count[4], a
+003E	430B	add     a, Text
+003F	408D	mov     Text[2], a
 0040	470A	mov     a, count[1]
-0041	530C	adc     a, count[3]
-0042	408E	mov     count[5], a
-				;60	    while (count--)
+0041	530C	adc     a, Text[1]
+0042	408E	mov     Text[3], a
+				;61	    while (count--)
 0043	284F	jmp     _L4
 				_L4:
-004F	470B	mov     a, count[2]
-0050	440D	xor     a, count[4]
-0051	470C	mov     a, count[3]
+004F	470B	mov     a, Text
+0050	440D	xor     a, Text[2]
+0051	470C	mov     a, Text[1]
 0052	3D0A	sz      Z
 				L0053:
-0053	440E	xor     a, count[5]
+0053	440E	xor     a, Text[3]
 0054	390A	snz     Z
 0055	2844	jmp     _L5
 0056	0003	ret
-				;61	    {
-				;62	        LCD_Write(1,*(pData++));
+				;62	    {
+				;63	        LCD_Write(1,*(pData++));
 				_L5:
-0044	470B	mov     a, count[2]
+0044	470B	mov     a, Text
 0045	0083	mov     MP1, a
-0046	470C	mov     a, count[3]
+0046	470C	mov     a, Text[1]
 0047	0081	mov     MP0, a
-0048	20F7	call    L00F7
+0048	2113	call    L0113
 0049	4085	mov     CD, a
 004A	0F01	mov     a, 1H
 004B	2003	call    _LCD_Write
-004C	548B	inc     count[2]
+004C	548B	inc     Text
 004D	3D0A	sz      Z
-004E	548C	inc     count[3]
-				;63	    }
-				;64	}
-				;65	void Lcd_Write_String(unsigned int line, unsigned int col, char *pText)
-				;66	{
-				;67		if(line == 1) 	LCD_Write(0,0x80 + col);
+004E	548C	inc     Text[1]
+				;64	    }
+				;65	}
+				;66	void Lcd_Write_String(unsigned int line, unsigned int col, char *pText)
+				;67	{
+				;68		if(line == 1) 	LCD_Write(0,0x80 + col);
 				_Lcd_Write_String:
 				_Lcd_Write_String:
 0069	470F	mov     a, line[0]
@@ -337,7 +337,7 @@
 006F	0B80	add     a, 80H
 0070	4085	mov     CD, a
 0071	287A	jmp     _L13
-				;68		if(line == 2) 	LCD_Write(0,0xC0 + col);
+				;69		if(line == 2) 	LCD_Write(0,0xC0 + col);
 				_L11:
 0072	470F	mov     a, line[0]
 0073	0C02	xor     a, 2H
@@ -350,24 +350,70 @@
 				_L13:
 007A	0F00	mov     a, 0H
 007B	2003	call    _LCD_Write
-				;69		Str_To_Lcd(pText, strlen(pText));
+				;70		Str_To_Lcd(pText, strlen(pText));
 				_L12:
 007C	4713	mov     a, pText[0]
 007D	4085	mov     CD, a
 007E	4714	mov     a, pText[1]
 007F	4086	mov     i, a
-0080	20D8	call    L00D8
+0080	20F4	call    L00F4
 0081	4700	mov     a, ra
-0082	4089	mov     count, a
+0082	4089	mov     col, a
 0083	4701	mov     a, rb
-0084	408A	mov     count[1], a
+0084	408A	mov     col[1], a
 0085	4713	mov     a, pText[0]
-0086	4087	mov     pData, a
+0086	4087	mov     line, a
 0087	4714	mov     a, pText[1]
-0088	4088	mov     pData[1], a
+0088	4088	mov     line[1], a
 0089	2039	call    _Str_To_Lcd
 008A	0003	ret
-				;70	}
+				;71	}
+				;72	void Lcd_Clear(void)
+				;73	{
+				;74		LCD_Write(0,0x01);
+				_Lcd_Clear:
+				_Lcd_Clear:
+008B	0F01	mov     a, 1H
+008C	4085	mov     CD, a
+008D	0F00	mov     a, 0H
+008E	2003	call    _LCD_Write
+008F	0003	ret
+				;75	}
+				;76	void Lcd_Write_Char(unsigned int line, unsigned int col, char Text)
+				;77	{
+				;78		if(line == 1) 	LCD_Write(0,0x80 + col);
+				_Lcd_Write_Char:
+				_Lcd_Write_Char:
+0090	4707	mov     a, line[0]
+0091	0C01	xor     a, 1H
+0092	4508	or      a, line[1]
+0093	390A	snz     Z
+0094	2899	jmp     _L16
+0095	4709	mov     a, col[0]
+0096	0B80	add     a, 80H
+0097	4085	mov     CD, a
+0098	28A1	jmp     _L18
+				;79		if(line == 2) 	LCD_Write(0,0xC0 + col);
+				_L16:
+0099	4707	mov     a, line[0]
+009A	0C02	xor     a, 2H
+009B	4508	or      a, line[1]
+009C	390A	snz     Z
+009D	28A3	jmp     _L17
+009E	4709	mov     a, col[0]
+009F	0BC0	add     a, C0H
+00A0	4085	mov     CD, a
+				_L18:
+00A1	0F00	mov     a, 0H
+00A2	2003	call    _LCD_Write
+				;80		LCD_Write(1,Text);
+				_L17:
+00A3	470B	mov     a, Text[0]
+00A4	4085	mov     CD, a
+00A5	0F01	mov     a, 1H
+00A6	2003	call    _LCD_Write
+00A7	0003	ret
+				;81	}
 				data .SECTION 'DATA'
 				__pd DB DUP (?) ; __pd
 				__pdc DB DUP (?) ; __pdc
@@ -380,9 +426,10 @@
 				re DB DUP (?)
 				CD DB DUP (?) ; CD
 				i DB 2 DUP (?) ; i
-				pData DB DUP (?) ; pData
-				count DB 2 DUP (?) ; count
+				line DB 2 DUP (?) ; line
+				col DB 2 DUP (?) ; col
+				Text DB DUP (?) ; Text
 				line DB 2 DUP (?) ; line
 				col DB 2 DUP (?) ; col
 				pText DB DUP (?) ; pText
-				i DB 2 DUP (?) ; i
+				_main_2 DB DUP (?)
